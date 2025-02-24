@@ -1,29 +1,29 @@
-import { useEffect, useState } from "react";
-import "./App.css";
+import { useState, useEffect } from "react";
 import { TodoProvider } from "./contexts";
+import "./App.css";
 import TodoForm from "./components/TodoForm";
 import TodoItem from "./components/TodoItem";
 
 function App() {
-  const [todos, settodos] = useState([]);
+  const [todos, setTodos] = useState([]);
+
   const addTodo = (todo) => {
-    settodos((prev) => {
-      [{ id: Date.now(), ...todo }, ...prev];
-    });
+    setTodos((prev) => [...prev, { id: Date.now(), ...todo }]);
   };
+
   const updateTodo = (id, todo) => {
-    settodos((prev) =>
-      prev.map((prevtodo) => (prevtodo.id === id ? todo : prevtodo))
+    setTodos((prev) =>
+      prev.map((prevTodo) => (prevTodo.id === id ? todo : prevTodo))
     );
   };
 
   const deleteTodo = (id) => {
-    settodos((prev) => prev.filter((prevtodo) => prevtodo.id !== id));
+    setTodos((prev) => prev.filter((todo) => todo.id !== id));
   };
 
   const toggleComplete = (id) => {
     //console.log(id);
-    settodos((prev) =>
+    setTodos((prev) =>
       prev.map((prevTodo) =>
         prevTodo.id === id
           ? { ...prevTodo, completed: !prevTodo.completed }
@@ -34,8 +34,9 @@ function App() {
 
   useEffect(() => {
     const todos = JSON.parse(localStorage.getItem("todos"));
+
     if (todos && todos.length > 0) {
-      settodos(todos);
+      setTodos(todos);
     }
   }, []);
 
